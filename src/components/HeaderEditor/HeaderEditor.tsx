@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Container, Toolbar, Typography, Menu, IconButton } from "@mui/material"
+import { AppBar, Container, Toolbar, Typography, Menu, IconButton, Tooltip } from "@mui/material"
 import PersonIcon from '@mui/icons-material/Person';
 
 const Header = () => {
@@ -14,6 +14,12 @@ const Header = () => {
             sx={{ mr: 2, display: { xs: 'none', md: 'flex', color: "#000000", flexGrow: 1 }}}
           >
             OT Editor
+          </Typography>
+          <Tooltip title="3 users are editing this file">
+            <PersonIcon sx={{ color: "black" }} />
+          </Tooltip>
+          <Typography variant="subtitle2" sx={{ color: "black" }}>
+            3
           </Typography>
         </Toolbar>
       </Container>

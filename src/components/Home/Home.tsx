@@ -1,8 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Container, Stack, Typography, Button, TextField, Grid } from "@mui/material"
 import styles from "./Home.module.scss"
+import { useNavigate } from "react-router-dom"
+
+import { createFile } from "src/api/services/files"
+
+const handleCreateFile = async () => {
+  let id = uuidv4()
+
+  try {
+    let postRequest = await createFile(id)
+    
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 const Home = () => {
+  const [fileId, setFileId] = useState("")
+  let navigate = useNavigate()
+
+  const handleCreateFile = async () => {
+    let id = uuidv4()
+  
+    try {
+      let postRequest = await createFile(id)
+      navigate(`/editor/${id}`)
+      
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <div className={styles.home}>
       <Container sx={{ height: "90vh", pt: 8, pb: 4 }} maxWidth="md">
@@ -11,7 +41,7 @@ const Home = () => {
               Collaborative Text Editor using Operational Transformation
             </Typography>
             <Grid item sx={{ textAlign: "center" }}>
-              <Button href="/editor" sx={{ width: "200px" }} variant="contained">
+              <Button onClick={handleCreateFile} sx={{ width: "200px" }} variant="contained">
                 Create New File
               </Button>
             </Grid>

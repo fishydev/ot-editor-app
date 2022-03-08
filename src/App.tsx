@@ -12,7 +12,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<HomeRoute />}></Route>
-        <Route path='/editor' element={<EditorRoute />}></Route>
+        <Route path='/editor/:id' element={<EditorRoute />}></Route>
       </Routes>
     </BrowserRouter>
   );
