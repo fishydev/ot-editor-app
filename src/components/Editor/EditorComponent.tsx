@@ -34,7 +34,7 @@ const EditorComponent = ({ id }: EditorProps) => {
     // setInterval(() => {
     //   socket.emit("syncReq", id)
     // }, 10000)
-  })
+  }, [])
 
   const syncFile = () => {
     console.log(typeof(content))

@@ -33,6 +33,17 @@ const Home = () => {
     }
   }
 
+  const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFileId(event.target.value)
+  }
+
+  // const handleOpenFile = async () => {
+  //   let id = fileId
+  //   try {
+
+  //   }
+  // }
+
   return (
     <div className={styles.home}>
       <Container sx={{ height: "90vh", pt: 8, pb: 4 }} maxWidth="md">
@@ -49,9 +60,9 @@ const Home = () => {
               ...or edit an existing file
             </Typography>
             <Stack direction="row" spacing={2}>
-              <TextField fullWidth sx={{ backgroundColor: "#DDDDDD" }} variant="outlined" label="Type in file code">
+              <TextField value={fileId} onChange={handleIdChange} fullWidth sx={{ backgroundColor: "#DDDDDD" }} variant="outlined" label="Type in file code">
               </TextField>
-              <Button href="/editor" variant="contained" color="success">Go</Button>
+              <Button variant="contained" color="success">Go</Button>
             </Stack>
         </Stack>
       </Container>
