@@ -1,6 +1,6 @@
-import React from "react"
-import HomeLayout from "../components/Layout/Home/HomeLayout"
-import Home from "../components/Home/Home"
+import React from 'react'
+import HomeLayout from '../components/Layout/Home/HomeLayout'
+import Home from '../components/Home/Home'
 
 const HomeRoute = () => {
   return (
@@ -9,7 +9,7 @@ const HomeRoute = () => {
         <Home />
       </HomeLayout>
     </>
-  );
+  )
 }
 
 export default HomeRoute

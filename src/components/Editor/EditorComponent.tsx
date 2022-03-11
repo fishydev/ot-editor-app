@@ -1,31 +1,31 @@
-import React, { useState, useEffect, useRef } from "react"
-import MonacoEditor, { OnChange } from "@monaco-editor/react"
-import socketIOClient, { Socket } from "socket.io-client";
+import React, { useState, useEffect, useRef } from 'react'
+import MonacoEditor, { OnChange } from '@monaco-editor/react'
+import socketIOClient, { Socket } from 'socket.io-client'
 
-import { Fab } from "@mui/material"
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import SyncIcon from '@mui/icons-material/Sync';
+import { Fab } from '@mui/material'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import SyncIcon from '@mui/icons-material/Sync'
 
-const SOCKET_ENDPOINT = "http://localhost:8999";
+const SOCKET_ENDPOINT = 'http://localhost:8999'
 
 type EditorProps = {
   id: string
 }
 
 const EditorComponent = ({ id }: EditorProps) => {
-  const [response, setResponse] = useState("")
-  const [content, setContent] = useState("")
+  const [response, setResponse] = useState('')
+  const [content, setContent] = useState('')
   const socketClientRef = useRef<Socket>()
 
   const editorRef = useRef(null)
-  
+
   useEffect(() => {
-    const socket = socketIOClient(SOCKET_ENDPOINT, { transports: ['websocket']})
-    socket.on("FromAPI", data => {
+    const socket = socketIOClient(SOCKET_ENDPOINT, { transports: ['websocket'] })
+    socket.on('FromAPI', (data) => {
       setResponse(data)
       console.log(response)
     })
-    socket.on("syncRes", data => {
+    socket.on('syncRes', (data) => {
       setContent(data)
     })
 
@@ -37,8 +37,8 @@ const EditorComponent = ({ id }: EditorProps) => {
   }, [])
 
   const syncFile = () => {
-    console.log(typeof(content))
-    socketClientRef.current?.emit("syncReq", {id: id, content: content})
+    console.log(typeof content)
+    socketClientRef.current?.emit('syncReq', { id: id, content: content })
   }
 
   const onChangeEditor = (newVal: any, e: any) => {
@@ -47,15 +47,11 @@ const EditorComponent = ({ id }: EditorProps) => {
 
   return (
     <React.Fragment>
-      <MonacoEditor
-        value={content}
-        height="90vh"
-        onChange={onChangeEditor}
-      />
-      <Fab href="/" sx={{ position: "fixed", bottom: "20px", left: "20px" }}>
+      <MonacoEditor value={content} height="90vh" onChange={onChangeEditor} />
+      <Fab href="/" sx={{ position: 'fixed', bottom: '20px', left: '20px' }}>
         <ArrowBackIosNewIcon />
       </Fab>
-      <Fab onClick={syncFile} sx={{ position: "fixed", bottom: "20px", right: "20px" }}>
+      <Fab onClick={syncFile} sx={{ position: 'fixed', bottom: '20px', right: '20px' }}>
         <SyncIcon />
       </Fab>
     </React.Fragment>

@@ -1,6 +1,6 @@
-import React from "react";
-import Footer from "../../Footer/Footer"
-import Header from "../../Header/Header"
+import React from 'react'
+import Footer from '../../Footer/Footer'
+import Header from '../../Header/Header'
 
 type Props = {
   children: JSX.Element
@@ -8,11 +8,11 @@ type Props = {
 
 const HomeLayout = ({ children }: Props) => (
   <>
-  <div>
-    <Header></Header>
-    <main>{ children }</main>
-    <Footer></Footer>
-  </div>
+    <div>
+      <Header></Header>
+      <main>{children}</main>
+      <Footer></Footer>
+    </div>
   </>
 )
 
