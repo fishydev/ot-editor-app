@@ -1,19 +1,21 @@
 import React from 'react'
 import Footer from '../../Footer/Footer'
 import HeaderEditor from '../../HeaderEditor/HeaderEditor'
+import Editor from "src/components/Editor/Editor"
+import { useParams } from 'react-router-dom'
 
-type Props = {
-  children: JSX.Element
-}
+const EditorLayout = () => {
+  let { id } = useParams()
 
-const EditorLayout = ({ children }: Props) => (
+  return (
   <>
     <div>
       <HeaderEditor></HeaderEditor>
-      <main>{children}</main>
+      <Editor id={id!}></Editor>
       <Footer></Footer>
     </div>
   </>
-)
+  )
+}
 
 export default EditorLayout

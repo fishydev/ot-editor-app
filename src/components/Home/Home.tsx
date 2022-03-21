@@ -19,8 +19,6 @@ const handleCreateFile = async () => {
 
 const Home = () => {
   const [fileId, setFileId] = useState('')
-  const [loginCard, setLoginCard] = useState(false)
-  const [signUpDialog, setSignUpCard] = useState(FOCUSABLE_SELECTOR)
   let navigate = useNavigate()
 
   const handleCreateFile = async () => {

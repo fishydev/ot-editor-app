@@ -10,7 +10,11 @@ import {
 } from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person'
 
-const Header = () => {
+type HeaderProps = {
+  handleShowLogin: Function
+}
+
+const Header = ({ handleShowLogin }: HeaderProps) => {
   return (
     <AppBar position="static" sx={{ backgroundColor: '#DDDDDD' }}>
       <Container maxWidth="xl">
@@ -21,11 +25,12 @@ const Header = () => {
             component={'div'}
             sx={{
               mr: 2,
-              display: { xs: 'none', md: 'flex', color: '#000000', flexGrow: 1 },
+              display: { md: 'flex', color: '#000000', flexGrow: 1 },
             }}
           >
             OT Editor
           </Typography>
+          <Button variant='contained' onClick={() => handleShowLogin(true)}>Login</Button>
         </Toolbar>
       </Container>
     </AppBar>
