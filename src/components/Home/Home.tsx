@@ -5,31 +5,19 @@ import styles from './Home.module.scss'
 import { useNavigate } from 'react-router-dom'
 
 import { createFile } from 'src/api/services/files'
-import { FOCUSABLE_SELECTOR } from '@testing-library/user-event/dist/utils'
-
-const handleCreateFile = async () => {
-  let id = uuidv4()
-
-  try {
-    let postRequest = await createFile(id)
-  } catch (err) {
-    console.log(err)
-  }
-}
 
 const Home = () => {
   const [fileId, setFileId] = useState('')
   let navigate = useNavigate()
 
   const handleCreateFile = async () => {
-    let id = uuidv4()
-
-    try {
-      let postRequest = await createFile(id)
-      navigate(`/editor/${id}`)
-    } catch (err) {
-      console.log(err)
-    }
+    // let id = uuidv4()
+    // try {
+    //   let postRequest = await createFile(id)
+    //   navigate(`/editor/${id}`)
+    // } catch (err) {
+    //   console.log(err)
+    // }
   }
 
   const handleIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {

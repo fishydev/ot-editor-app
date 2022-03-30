@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   AppBar,
   Container,
@@ -15,6 +15,20 @@ type HeaderProps = {
 }
 
 const Header = ({ handleShowLogin }: HeaderProps) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'))
+
+  let button
+
+  if (isLoggedIn) {
+    button = <Button variant="contained">Logout</Button>
+  } else {
+    button = (
+      <Button variant="contained" onClick={() => handleShowLogin(true)}>
+        Login
+      </Button>
+    )
+  }
+
   return (
     <AppBar position="static" sx={{ backgroundColor: '#DDDDDD' }}>
       <Container maxWidth="xl">
@@ -30,7 +44,7 @@ const Header = ({ handleShowLogin }: HeaderProps) => {
           >
             OT Editor
           </Typography>
-          <Button variant='contained' onClick={() => handleShowLogin(true)}>Login</Button>
+          {button}
         </Toolbar>
       </Container>
     </AppBar>
