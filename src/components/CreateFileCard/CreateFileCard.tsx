@@ -18,6 +18,7 @@ import { LoadingButton } from '@mui/lab'
 type Props = {
   isOpen: boolean
   onClose: Function
+  onCreate: Function
 }
 
 const cardStyle = {
@@ -30,7 +31,7 @@ const cardStyle = {
   p: 4,
 }
 
-const CreateFileCard = ({ isOpen, onClose }: Props) => {
+const CreateFileCard = ({ isOpen, onClose, onCreate }: Props) => {
   const [filename, setFilename] = useState('')
   const [isBusyCreate, setIsBusyCreate] = useState(false)
 
@@ -55,6 +56,7 @@ const CreateFileCard = ({ isOpen, onClose }: Props) => {
       console.log(error)
     } finally {
       setIsBusyCreate(false)
+      onCreate()
     }
   }
 

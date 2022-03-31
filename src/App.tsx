@@ -3,7 +3,7 @@ import GlobalLayout from 'src/layouts/Global/GlobalLayout'
 import EditorLayout from 'src/layouts/Editor/EditorLayout'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from 'src/components/Home/Home'
-import Files from 'src/pages/Files/FilesPage'
+import Files from 'src/components/Files/Files'
 import store from 'src/redux/store'
 import { Provider } from 'react-redux'
 

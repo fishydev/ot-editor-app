@@ -8,3 +8,7 @@ import { CreateFile } from "src/interfaces/files"
 export const createFile = async (payload: CreateFile) => {
   return postRequest("files/create", payload)
 }
+
+export const getFileList = async () => {
+  return getRequest("files/user")
+}
