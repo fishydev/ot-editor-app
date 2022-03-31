@@ -1,33 +1,37 @@
 import React from 'react'
-import HomeLayout from 'src/components/Layout/Home/HomeLayout'
-import EditorLayout from 'src/components/Layout/Editor/EditorLayout'
+import GlobalLayout from 'src/layouts/Global/GlobalLayout'
+import EditorLayout from 'src/layouts/Editor/EditorLayout'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from 'src/components/Home/Home'
-import Files from 'src/pages/Files/Files'
+import Files from 'src/pages/Files/FilesPage'
+import store from 'src/redux/store'
+import { Provider } from 'react-redux'
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <HomeLayout>
-              <Home />
-            </HomeLayout>
-          }
-        ></Route>
-        <Route
-          path="/files"
-          element={
-            <HomeLayout>
-              <Files />
-            </HomeLayout>
-          }
-        ></Route>
-        <Route path="/editor/:id" element={<EditorLayout />}></Route>
-      </Routes>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <GlobalLayout>
+                <Home />
+              </GlobalLayout>
+            }
+          ></Route>
+          <Route
+            path="/files"
+            element={
+              <GlobalLayout>
+                <Files />
+              </GlobalLayout>
+            }
+          ></Route>
+          <Route path="/editor/:id" element={<EditorLayout />}></Route>
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   )
 }
 

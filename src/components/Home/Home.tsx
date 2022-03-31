@@ -8,7 +8,6 @@ import { createFile } from 'src/api/services/files'
 
 const Home = () => {
   const [fileId, setFileId] = useState('')
-  let navigate = useNavigate()
 
   const handleCreateFile = async () => {
     // let id = uuidv4()

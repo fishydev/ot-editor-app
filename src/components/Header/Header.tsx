@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import {
   AppBar,
   Container,
@@ -12,15 +13,20 @@ import PersonIcon from '@mui/icons-material/Person'
 
 type HeaderProps = {
   handleShowLogin: Function
+  handleShowLogout: Function
 }
 
-const Header = ({ handleShowLogin }: HeaderProps) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'))
+const Header = ({ handleShowLogin, handleShowLogout }: HeaderProps) => {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
 
   let button
 
   if (isLoggedIn) {
-    button = <Button variant="contained">Logout</Button>
+    button = (
+      <Button variant="contained" onClick={() => handleShowLogout(true)}>
+        Logout
+      </Button>
+    )
   } else {
     button = (
       <Button variant="contained" onClick={() => handleShowLogin(true)}>
