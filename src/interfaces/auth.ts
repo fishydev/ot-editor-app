@@ -15,3 +15,8 @@ export interface LoginResponse {
   username: string,
   token: string
 }
+
+export interface IUserData {
+  userId: number,
+  username: string
+}

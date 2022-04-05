@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import MonacoEditor, { OnChange } from '@monaco-editor/react'
 import socketIOClient, { Socket } from 'socket.io-client'
-
+import { useAppSelector } from 'src/redux/hooks'
 import { Fab } from '@mui/material'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import SyncIcon from '@mui/icons-material/Sync'
@@ -9,11 +9,14 @@ import SyncIcon from '@mui/icons-material/Sync'
 const SOCKET_ENDPOINT = 'http://localhost:8999'
 
 type EditorProps = {
-  id: string
+  filename: string
 }
 
-const EditorComponent = ({ id }: EditorProps) => {
+const EditorComponent = ({ filename }: EditorProps) => {
   const [response, setResponse] = useState('')
+  const [username, setUsername] = useState(
+    useAppSelector((state) => state.auth.userData.username)
+  )
   const [content, setContent] = useState('')
   const socketClientRef = useRef<Socket>()
 
@@ -31,14 +34,21 @@ const EditorComponent = ({ id }: EditorProps) => {
 
     socketClientRef.current = socket
 
+    syncFile(true)
+
     // setInterval(() => {
     //   socket.emit("syncReq", id)
     // }, 10000)
   }, [])
 
-  const syncFile = () => {
+  const syncFile = (firstLoad: boolean) => {
     console.log(typeof content)
-    socketClientRef.current?.emit('syncReq', { id: id, content: content })
+    socketClientRef.current?.emit('syncReq', {
+      username: username,
+      filename: filename,
+      content: content,
+      firstLoad: firstLoad,
+    })
   }
 
   const onChangeEditor = (newVal: any, e: any) => {
@@ -51,7 +61,10 @@ const EditorComponent = ({ id }: EditorProps) => {
       <Fab href="/" sx={{ position: 'fixed', bottom: '20px', left: '20px' }}>
         <ArrowBackIosNewIcon />
       </Fab>
-      <Fab onClick={syncFile} sx={{ position: 'fixed', bottom: '20px', right: '20px' }}>
+      <Fab
+        onClick={() => syncFile(false)}
+        sx={{ position: 'fixed', bottom: '20px', right: '20px' }}
+      >
         <SyncIcon />
       </Fab>
     </React.Fragment>

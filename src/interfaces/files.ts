@@ -3,5 +3,6 @@ export interface CreateFile {
 }
 
 export interface IFileListItem {
-  filename: string
+  filename: string,
+  fileId: number
 }

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { v4 as uuidv4 } from 'uuid'
 import { Container, Grid, List, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
@@ -7,7 +6,6 @@ import CreateFileCard from 'src/components/CreateFileCard/CreateFileCard'
 import FileListItem from 'src/components/FileListItem/FileListItem'
 
 import { getFileList } from 'src/api/services/files'
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
 
 import { IFileListItem } from 'src/interfaces/files'
 
@@ -29,14 +27,6 @@ const Files = () => {
     }
   }
 
-  const generate = (element: React.ReactElement) => {
-    return [0, 1, 2].map((value) =>
-      React.cloneElement(element, {
-        key: value,
-      })
-    )
-  }
-
   const handleShowCreate = async (show: boolean) => {
     setCreateFileCard(show)
   }
@@ -48,6 +38,10 @@ const Files = () => {
   const createdFileHandler = () => {
     setCreateFileCard(false)
     loadFileList()
+  }
+
+  const openFile = (filename: string) => {
+    navigate(`/files/${filename}`)
   }
 
   return (
@@ -64,7 +58,15 @@ const Files = () => {
             }}
           >
             {fileList.map((item, index) => {
-              return <FileListItem key={index} filename={item.filename} />
+              return (
+                <FileListItem
+                  key={item.fileId}
+                  filename={item.filename}
+                  fileId={item.fileId}
+                  onOpenFile={(filename: string) => openFile(filename)}
+                  onDeletedFile={() => loadFileList()}
+                />
+              )
             })}
           </List>
         </Grid>

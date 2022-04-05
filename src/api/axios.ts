@@ -17,14 +17,16 @@ export const getRequest = async (URL: string) => {
 }
 
 export const postRequest = async (URL: string, payload?: any) => {
-  return axiosClient.post(`/${URL}`, payload).then((response) => response)
+  if (payload) return axiosClient.post(`/${URL}`, payload).then((response) => response)
+  return axiosClient.post(`/${URL}`).then((response) => response)
 }
 
 export const patchRequest = async (URL: string) => {
   return axiosClient.patch(`/${URL}`).then((response) => response)
 }
 
-export const deleteRequest = async (URL: string) => {
+export const deleteRequest = async (URL: string, payload?: any) => {
+  if (payload) return axiosClient.delete(`/${URL}`, payload).then((response) => response)
   return axiosClient.delete(`/${URL}`).then((response) => response)
 }
 

@@ -1,10 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit"
+import * as jwt from "jsonwebtoken"
 
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
     token: "",
-    isLoggedIn: false
+    isLoggedIn: false,
+    userData: {
+      userId: "",
+      username: ""
+    }
   },
   reducers: {
     setToken: (state, action) => {
@@ -14,13 +19,24 @@ export const authSlice = createSlice({
     removeToken: state => {
       state.token = "",
       state.isLoggedIn = false
+    },
+    setUser: (state, action) => {
+      state.userData = action.payload
+    },
+    removeUser: state => {
+      state.userData = {
+        userId: "",
+        username: ""
+      }
     }
   }
 })
 
 export const {
   setToken,
-  removeToken
+  removeToken,
+  setUser,
+  removeUser
 } = authSlice.actions
 
 export default authSlice.reducer

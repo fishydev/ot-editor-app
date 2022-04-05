@@ -7,7 +7,7 @@ import LogoutCard from 'src/components/LogoutCard/LogoutCard'
 import SignUpCard from 'src/components/SignUpCard/SignUpCard'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
-import { removeToken, setToken } from 'src/redux/auth/authSlice'
+import { removeToken, removeUser, setToken, setUser } from 'src/redux/auth/authSlice'
 
 import { LoginResponse } from 'src/interfaces/auth'
 
@@ -47,6 +47,12 @@ const GlobalLayout = ({ children }: Props) => {
   const handleLogin = (payload: LoginResponse) => {
     localStorage.setItem('token', payload.token)
     dispatch(setToken(payload.token))
+    dispatch(
+      setUser({
+        userId: payload.userId,
+        username: payload.username,
+      })
+    )
     handleClose()
     navigate('/files')
   }
@@ -54,6 +60,7 @@ const GlobalLayout = ({ children }: Props) => {
   const handleLogout = () => {
     localStorage.removeItem('token')
     dispatch(removeToken())
+    dispatch(removeUser())
     window.location.href = 'http://localhost:3000'
   }
 

@@ -28,7 +28,7 @@ function App() {
               </GlobalLayout>
             }
           ></Route>
-          <Route path="/editor/:id" element={<EditorLayout />}></Route>
+          <Route path="/files/:filename" element={<EditorLayout />}></Route>
         </Routes>
       </BrowserRouter>
     </Provider>
