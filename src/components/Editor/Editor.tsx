@@ -5,6 +5,7 @@ import { useAppSelector } from 'src/redux/hooks'
 import { Fab } from '@mui/material'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import SyncIcon from '@mui/icons-material/Sync'
+import { useLocation } from 'react-router-dom'
 
 const SOCKET_ENDPOINT = 'http://localhost:8999'
 
@@ -22,6 +23,13 @@ const EditorComponent = ({ filename }: EditorProps) => {
 
   const editorRef = useRef(null)
 
+  const userData = {
+    userId: useAppSelector((state) => state.auth.userData.userId),
+    username: useAppSelector((state) => state.auth.userData.username),
+  }
+
+  const openedFileId = useAppSelector((state) => state.file.openedFileId)
+
   useEffect(() => {
     const socket = socketIOClient(SOCKET_ENDPOINT, { transports: ['websocket'] })
     socket.on('FromAPI', (data) => {
@@ -34,7 +42,20 @@ const EditorComponent = ({ filename }: EditorProps) => {
 
     socketClientRef.current = socket
 
-    syncFile(true)
+    // syncFile(true)
+
+    console.log({
+      fileId: openedFileId,
+      user: userData,
+    })
+
+    socketClientRef.current.emit('openFile', {
+      fileId: openedFileId,
+      user: userData,
+    })
+    return () => {
+      socketClientRef.current?.disconnect()
+    }
 
     // setInterval(() => {
     //   socket.emit("syncReq", id)

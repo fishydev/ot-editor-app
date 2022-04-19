@@ -35,11 +35,11 @@ const FileListItem = ({ filename, fileId, onDeletedFile, onOpenFile }: Props) =>
     <div>
       <ListItem
         secondaryAction={
-          <LoadingButton loading={isBusy}>
-            <IconButton onClick={() => deleteFileHandler(fileId)}>
-              <DeleteIcon />
-            </IconButton>
-          </LoadingButton>
+          <LoadingButton
+            loading={isBusy}
+            onClick={() => deleteFileHandler(fileId)}
+            startIcon={<DeleteIcon />}
+          ></LoadingButton>
         }
       >
         <ListItemIcon>
