@@ -6,7 +6,7 @@ import { useAppDispatch } from 'src/redux/hooks'
 import CreateFileCard from 'src/components/CreateFileCard/CreateFileCard'
 import FileListItem from 'src/components/FileListItem/FileListItem'
 
-import { getFileList } from 'src/api/services/files'
+import { getFileList, getFilesByUsername } from 'src/api/services/files'
 
 import { IFileListItem } from 'src/interfaces/files'
 import { setOpenedFileId } from 'src/redux/files/fileSlice'
@@ -53,7 +53,14 @@ const Files = () => {
     dispatch(setOpenedFileId(fileId))
   }
 
-  const searchByUsername = () => {}
+  const searchByUsername = async () => {
+    try {
+      const getResponse = await getFilesByUsername(usernameQuery)
+      setFileList(getResponse.data)
+    } catch (error) {
+      //
+    }
+  }
 
   return (
     <div>
@@ -67,6 +74,7 @@ const Files = () => {
               <TextField
                 label="Username"
                 size="small"
+                value={usernameQuery}
                 sx={{
                   marginRight: 2,
                 }}

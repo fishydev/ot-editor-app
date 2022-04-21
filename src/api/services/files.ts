@@ -16,3 +16,7 @@ export const getFileList = async () => {
 export const deleteFile = async (fileId: number) => {
   return deleteRequest(`files/${fileId}`)
 }
+
+export const getFilesByUsername = async (username: string) => {
+  return getRequest(`files/user?username=${username}`)
+}
