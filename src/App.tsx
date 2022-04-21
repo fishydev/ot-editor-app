@@ -6,31 +6,34 @@ import Home from 'src/components/Home/Home'
 import Files from 'src/components/Files/Files'
 import store from 'src/redux/store'
 import { Provider } from 'react-redux'
+import { SnackbarProvider } from 'notistack'
 
 function App() {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <GlobalLayout>
-                <Home />
-              </GlobalLayout>
-            }
-          ></Route>
-          <Route
-            path="/files"
-            element={
-              <GlobalLayout>
-                <Files />
-              </GlobalLayout>
-            }
-          ></Route>
-          <Route path="/files/:filename" element={<EditorLayout />}></Route>
-        </Routes>
-      </BrowserRouter>
+      <SnackbarProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <GlobalLayout>
+                  <Home />
+                </GlobalLayout>
+              }
+            ></Route>
+            <Route
+              path="/files"
+              element={
+                <GlobalLayout>
+                  <Files />
+                </GlobalLayout>
+              }
+            ></Route>
+            <Route path="/files/:filename" element={<EditorLayout />}></Route>
+          </Routes>
+        </BrowserRouter>
+      </SnackbarProvider>
     </Provider>
   )
 }
