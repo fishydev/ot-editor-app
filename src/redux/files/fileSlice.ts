@@ -1,20 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit"
 import * as jwt from "jsonwebtoken"
+import { IOpenedFile } from "src/interfaces/files"
 
 export const fileSlice = createSlice({
   name: "auth",
   initialState: {
-    openedFileId: null
+    openedFileUuid: null,
+    openedFile: {} as IOpenedFile
   },
   reducers: {
-    setOpenedFileId: (state, action) => {
-      state.openedFileId = action.payload
+    setOpenedFileUuid: (state, action) => {
+      state.openedFileUuid = action.payload
+    },
+    setOpenedFile: (state, action) => {
+      state.openedFile = action.payload
     }
   }
 })
 
 export const {
-  setOpenedFileId
+  setOpenedFileUuid,
+  setOpenedFile
 } = fileSlice.actions
 
 export default fileSlice.reducer

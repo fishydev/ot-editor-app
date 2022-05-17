@@ -8,8 +8,8 @@ import FileListItem from 'src/components/FileListItem/FileListItem'
 
 import { getFileList, getFilesByUsername } from 'src/api/services/files'
 
-import { IFileListItem } from 'src/interfaces/files'
-import { setOpenedFileId } from 'src/redux/files/fileSlice'
+import { IFileListItem, IOpenedFile } from 'src/interfaces/files'
+import { setOpenedFileUuid, setOpenedFile } from 'src/redux/files/fileSlice'
 
 const Files = () => {
   const [createFileCard, setCreateFileCard] = useState(false)
@@ -48,9 +48,10 @@ const Files = () => {
     loadFileList()
   }
 
-  const openFile = (fileId: number) => {
-    navigate(`/files/${fileId}`)
-    dispatch(setOpenedFileId(fileId))
+  const openFile = (file: IFileListItem) => {
+    navigate(`/files/${file.uuid}`)
+    dispatch(setOpenedFileUuid(file.uuid))
+    dispatch(setOpenedFile(file))
   }
 
   const searchByUsername = async () => {
@@ -97,7 +98,8 @@ const Files = () => {
                   key={item.fileId}
                   filename={item.filename}
                   fileId={item.fileId}
-                  onOpenFile={() => openFile(item.fileId)}
+                  uuid={item.uuid}
+                  onOpenFile={() => openFile(item)}
                   onDeletedFile={() => loadFileList()}
                 />
               )

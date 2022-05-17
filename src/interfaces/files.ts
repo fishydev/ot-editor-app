@@ -3,6 +3,13 @@ export interface CreateFile {
 }
 
 export interface IFileListItem {
-  filename: string,
   fileId: number
+  filename: string,
+  uuid: string
+}
+
+export interface IOpenedFile {
+  fileId: number,
+  filename: string,
+  uuid: string
 }

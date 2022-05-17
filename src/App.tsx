@@ -30,7 +30,7 @@ function App() {
                 </GlobalLayout>
               }
             ></Route>
-            <Route path="/files/:filename" element={<EditorLayout />}></Route>
+            <Route path="/files/:uuid" element={<EditorLayout />}></Route>
           </Routes>
         </BrowserRouter>
       </SnackbarProvider>

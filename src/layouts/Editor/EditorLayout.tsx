@@ -5,13 +5,13 @@ import Editor from 'src/components/Editor/Editor'
 import { useParams } from 'react-router-dom'
 
 const EditorLayout = () => {
-  let { filename } = useParams()
+  let { uuid } = useParams()
 
   return (
     <>
       <div>
         <HeaderEditor></HeaderEditor>
-        <Editor filename={filename!}></Editor>
+        <Editor uuid={uuid!}></Editor>
         <Footer></Footer>
       </div>
     </>

@@ -8,11 +8,12 @@ import { deleteFile } from 'src/api/services/files'
 type Props = {
   filename: string
   fileId: number
+  uuid: string
   onDeletedFile: Function
   onOpenFile: Function
 }
 
-const FileListItem = ({ filename, fileId, onDeletedFile, onOpenFile }: Props) => {
+const FileListItem = ({ filename, fileId, uuid, onDeletedFile, onOpenFile }: Props) => {
   const [isBusy, setIsBusy] = useState(false)
 
   const deleteFileHandler = async (fileId: number) => {
@@ -27,8 +28,8 @@ const FileListItem = ({ filename, fileId, onDeletedFile, onOpenFile }: Props) =>
     }
   }
 
-  const openFileHandler = async (filename: string) => {
-    onOpenFile(filename)
+  const openFileHandler = async (uuid: string) => {
+    onOpenFile(uuid)
   }
 
   return (
@@ -45,7 +46,7 @@ const FileListItem = ({ filename, fileId, onDeletedFile, onOpenFile }: Props) =>
         <ListItemIcon>
           <InsertDriveFileIcon />
         </ListItemIcon>
-        <ListItemText primary={filename} onClick={() => openFileHandler(filename)} />
+        <ListItemText primary={filename} onClick={() => openFileHandler(uuid)} />
       </ListItem>
       <Divider />
     </div>

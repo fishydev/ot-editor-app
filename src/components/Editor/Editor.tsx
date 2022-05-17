@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { MutableRefObject, useState, useEffect, useRef } from 'react'
 import socketIOClient, { Socket } from 'socket.io-client'
 import { useAppSelector } from 'src/redux/hooks'
 import { Fab } from '@mui/material'
@@ -14,14 +14,15 @@ import {
 } from '@codemirror/collab'
 import { EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view'
 import { ChangeSet, Text } from '@codemirror/state'
+import { EditorState, basicSetup } from '@codemirror/basic-setup'
 
 const SOCKET_ENDPOINT = 'http://localhost:8999'
 
 type EditorProps = {
-  filename: string
+  uuid: string
 }
 
-const EditorComponent = ({ filename }: EditorProps) => {
+const EditorComponent = ({ uuid }: EditorProps) => {
   const [response, setResponse] = useState('')
   const [username, setUsername] = useState(
     useAppSelector((state) => state.auth.userData.username)
@@ -31,15 +32,15 @@ const EditorComponent = ({ filename }: EditorProps) => {
   const [loading, setLoading] = useState(false)
   const socketClientRef = useRef<Socket>()
 
-  const editorRef = useRef(null)
-  const monacoRef = useRef(null)
+  const editorRef = useRef<HTMLDivElement | undefined>()
 
   const userData = {
     userId: useAppSelector((state) => state.auth.userData.userId),
     username: useAppSelector((state) => state.auth.userData.username),
   }
 
-  const openedFileId = useAppSelector((state) => state.file.openedFileId)
+  const openedFileUuid = useAppSelector((state) => state.file.openedFileUuid)
+  const openedFile = useAppSelector((state) => state.file.openedFile)
 
   const pushUpdates = async (
     version: number,
@@ -69,7 +70,7 @@ const EditorComponent = ({ filename }: EditorProps) => {
     })
   }
 
-  const pullUpdates = async (version: number | null): Promise<readonly Update[]> => {
+  const pullUpdates = async (version: number): Promise<readonly Update[]> => {
     setLoading(true)
 
     return await new Promise((resolve) => {
@@ -86,19 +87,28 @@ const EditorComponent = ({ filename }: EditorProps) => {
     })
   }
 
-  const getDocument = async (): Promise<{ version: number; doc: Text }> => {
+  const getDocument = async (
+    uuid: string | null
+  ): Promise<{ version: number; doc: Text }> => {
     return await new Promise((resolve) => {
-      socketClientRef.current?.emit('getDocument', (data: any) => {
-        setVersion(data.version)
-        setDoc(Text.of(data.doc.split('\n')))
-        setLoading(false)
+      socketClientRef.current?.emit(
+        'getDocument',
+        { filename: openedFile.filename, username: username, uuid: openedFile.uuid },
+        (data: any) => {
+          setVersion(data.version)
+          console.log(`getDocument res`)
+          console.log(`version: ${data.version}`)
+          console.log(`content: ${data.doc}`)
+          setDoc(Text.of(data.doc.split('\n')))
+          setLoading(false)
 
-        resolve(data)
-      })
+          resolve(data)
+        }
+      )
     })
   }
 
-  const getClient = (startVersion: number) => {
+  const getClientExtension = (startVersion: number) => {
     let plugin = ViewPlugin.fromClass(
       class {
         pushing = false
@@ -146,27 +156,36 @@ const EditorComponent = ({ filename }: EditorProps) => {
 
   useEffect(() => {
     const socket = socketIOClient(SOCKET_ENDPOINT, { transports: ['websocket'] })
-    socket.on('FromAPI', (data) => {
-      setResponse(data)
-      console.log(response)
-    })
+    // socket.on('FromAPI', (data) => {
+    //   setResponse(data)
+    //   console.log(response)
+    // })
+
+    socket.emit('openFile', { uuid: openedFileUuid, user: userData })
 
     socketClientRef.current = socket
 
     // syncFile(true)
-    getDocument()
+    getDocument(openedFileUuid)
+    const state = EditorState.create({
+      doc: doc ? doc : 'failed to fetch file',
+      extensions: [basicSetup, getClientExtension(version ? version : 0)],
+    })
+
+    const view = new EditorView({ state, parent: editorRef?.current })
 
     console.log({
-      fileId: openedFileId,
+      uuid: openedFileUuid,
       user: userData,
     })
 
-    socketClientRef.current.emit('openFile', {
-      fileId: openedFileId,
-      user: userData,
-    })
+    // socketClientRef.current.emit('openFile', {
+    //   fileId: openedFileId,
+    //   user: userData,
+    // })
     return () => {
       socketClientRef.current?.disconnect()
+      view.destroy()
     }
 
     // setInterval(() => {
@@ -176,12 +195,12 @@ const EditorComponent = ({ filename }: EditorProps) => {
 
   return (
     <React.Fragment>
-      {/* TODO add CodeMirror */}
+      <div ref={editorRef as React.RefObject<HTMLDivElement>}></div>
       <Fab href="/" sx={{ position: 'fixed', bottom: '20px', left: '20px' }}>
         <ArrowBackIosNewIcon />
       </Fab>
       <Fab
-        onClick={() => pullUpdates(version)}
+        onClick={() => (version ? pullUpdates(version) : {})}
         sx={{ position: 'fixed', bottom: '20px', right: '20px' }}
       >
         <SyncIcon />

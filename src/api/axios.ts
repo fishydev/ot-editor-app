@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { useSnackbar } from "notistack"
+// import { useSnackbar } from "notistack"
 
 const axiosClient = axios.create()
 
-const { enqueueSnackbar } = useSnackbar()
+// const { enqueueSnackbar } = useSnackbar()
 
 axiosClient.defaults.baseURL = 'http://localhost:8999/api/v1'
 
@@ -18,7 +18,7 @@ axiosClient.interceptors.request.use((config: any) => {
 axiosClient.interceptors.response.use((response) => {
   return response
 }, (error) => {
-  enqueueSnackbar(error, { variant: 'error' })
+  // enqueueSnackbar(error, { variant: 'error' })
 })
 
 export const getRequest = async (URL: string) => {
