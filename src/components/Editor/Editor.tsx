@@ -96,11 +96,11 @@ const EditorComponent = ({ uuid }: EditorProps) => {
         { filename: openedFile.filename, username: username, uuid: openedFile.uuid },
         (data: any) => {
           setVersion(data.version)
-          console.log(`getDocument res`)
-          console.log(`version: ${data.version}`)
-          console.log(`content: ${data.doc}`)
           setDoc(Text.of(data.doc.split('\n')))
           setLoading(false)
+          // console.log(`state in getDocument()`)
+          // console.log(`version: ${version}`)
+          // console.log(`content: ${doc}`)
 
           resolve(data)
         }
@@ -166,13 +166,27 @@ const EditorComponent = ({ uuid }: EditorProps) => {
     socketClientRef.current = socket
 
     // syncFile(true)
-    getDocument(openedFileUuid)
-    const state = EditorState.create({
-      doc: doc ? doc : 'failed to fetch file',
-      extensions: [basicSetup, getClientExtension(version ? version : 0)],
-    })
+    let state: EditorState
+    let view: EditorView
+    getDocument(openedFileUuid).then((data) => {
+      console.log(`data in useEffect()`)
+      console.log(`version: ${data.version}`)
+      console.log(`content: ${data.doc}`)
+      setDoc(data.doc)
+      setVersion(data.version)
+      state = EditorState.create({
+        doc: data.doc,
+        extensions: [basicSetup, getClientExtension(data.version)],
+      })
 
-    const view = new EditorView({ state, parent: editorRef?.current })
+      view = new EditorView({ state, parent: editorRef?.current })
+    })
+    // const state = EditorState.create({
+    //   doc: doc ? doc : 'failed to fetch file',
+    //   extensions: [basicSetup, getClientExtension(version ? version : 0)],
+    // })
+
+    // const view = new EditorView({ state, parent: editorRef?.current })
 
     console.log({
       uuid: openedFileUuid,

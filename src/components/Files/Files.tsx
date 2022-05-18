@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Grid, List, Button, TextField } from '@mui/material'
+import { useAppSelector } from 'src/redux/hooks'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from 'src/redux/hooks'
 
@@ -14,6 +15,9 @@ import { setOpenedFileUuid, setOpenedFile } from 'src/redux/files/fileSlice'
 const Files = () => {
   const [createFileCard, setCreateFileCard] = useState(false)
   const [usernameQuery, setUsernameQuery] = useState('')
+  const [username, setUsername] = useState(
+    useAppSelector((state) => state.auth.userData.username)
+  )
   const [fileList, setFileList] = useState([] as IFileListItem[])
   let navigate = useNavigate()
   let dispatch = useAppDispatch()
@@ -24,7 +28,7 @@ const Files = () => {
 
   const loadFileList = async () => {
     try {
-      const getResponse = await getFileList()
+      const getResponse = await getFilesByUsername(username)
       setFileList(getResponse.data)
     } catch (error) {
       //
