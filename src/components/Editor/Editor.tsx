@@ -141,7 +141,9 @@ const EditorComponent = ({ uuid }: EditorProps) => {
           while (!this.done) {
             let version = getSyncedVersion(this.view.state)
             let updates = await pullUpdates(version)
-            this.view.dispatch(receiveUpdates(this.view.state, updates))
+            if (updates.length > 0) {
+              this.view.dispatch(receiveUpdates(this.view.state, updates))
+            }
           }
         }
 
@@ -155,13 +157,16 @@ const EditorComponent = ({ uuid }: EditorProps) => {
   }
 
   useEffect(() => {
-    const socket = socketIOClient(SOCKET_ENDPOINT, { transports: ['websocket'] })
+    const socket = socketIOClient(SOCKET_ENDPOINT, {
+      transports: ['websocket'],
+      query: { fileId: openedFile.fileId, uuid: openedFile.uuid, user: userData },
+    })
     // socket.on('FromAPI', (data) => {
     //   setResponse(data)
     //   console.log(response)
     // })
 
-    socket.emit('openFile', { uuid: openedFileUuid, user: userData })
+    // socket.emit('openFile', { uuid: openedFileUuid, user: userData })
 
     socketClientRef.current = socket
 
