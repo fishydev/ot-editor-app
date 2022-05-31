@@ -51,11 +51,6 @@ const EditorComponent = ({ uuid }: EditorProps) => {
       changes: u.changes.toJSON(),
     }))
 
-    socketClientRef.current?.emit('pushUpdates', {
-      version: version,
-      updates: updates,
-    })
-
     return await new Promise((resolve) => {
       socketClientRef.current?.emit(
         'pushUpdates',
@@ -75,6 +70,7 @@ const EditorComponent = ({ uuid }: EditorProps) => {
 
     return await new Promise((resolve) => {
       socketClientRef.current?.emit('pullUpdates', { version: version }, (data: any) => {
+        console.log(data)
         resolve(
           data.updates.map((u: any) => ({
             changes: ChangeSet.fromJSON(u.changes),
@@ -133,7 +129,7 @@ const EditorComponent = ({ uuid }: EditorProps) => {
           this.pushing = false
 
           if (sendableUpdates(this.view.state).length) {
-            setTimeout(() => this.push(), 100)
+            setTimeout(() => this.push(), 1000)
           }
         }
 
@@ -159,7 +155,12 @@ const EditorComponent = ({ uuid }: EditorProps) => {
   useEffect(() => {
     const socket = socketIOClient(SOCKET_ENDPOINT, {
       transports: ['websocket'],
-      query: { fileId: openedFile.fileId, uuid: openedFile.uuid, user: userData },
+      query: {
+        fileId: openedFile.fileId,
+        uuid: openedFile.uuid,
+        userId: userData.userId,
+        username: userData.username,
+      },
     })
     // socket.on('FromAPI', (data) => {
     //   setResponse(data)
