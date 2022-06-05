@@ -70,14 +70,18 @@ const EditorComponent = ({ uuid }: EditorProps) => {
 
     return await new Promise((resolve) => {
       socketClientRef.current?.emit('pullUpdates', { version: version }, (data: any) => {
+        console.log('pullUpdates res')
         console.log(data)
-        resolve(
-          data.updates.map((u: any) => ({
-            changes: ChangeSet.fromJSON(u.changes),
-            clientId: u.clientID,
-          }))
-        )
-
+        if (data === false) {
+          resolve([])
+        } else {
+          resolve(
+            data.updates.map((u: any) => ({
+              changes: ChangeSet.fromJSON(u.changes),
+              clientId: u.clientID,
+            }))
+          )
+        }
         setLoading(false)
       })
     })
