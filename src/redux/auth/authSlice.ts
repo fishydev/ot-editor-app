@@ -26,7 +26,7 @@ export const authSlice = createSlice({
     },
     removeUser: state => {
       state.userData = {
-        userId: "",
+        userId: 0,
         username: ""
       }
     }

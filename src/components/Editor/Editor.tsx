@@ -67,21 +67,17 @@ const EditorComponent = ({ uuid }: EditorProps) => {
 
   const pullUpdates = async (version: number): Promise<readonly Update[]> => {
     setLoading(true)
-
+    console.log(`pullUpdates req sent`)
     return await new Promise((resolve) => {
       socketClientRef.current?.emit('pullUpdates', { version: version }, (data: any) => {
-        console.log('pullUpdates res')
-        console.log(data)
-        if (data === false) {
-          resolve([])
-        } else {
-          resolve(
-            data.updates.map((u: any) => ({
-              changes: ChangeSet.fromJSON(u.changes),
-              clientId: u.clientID,
-            }))
-          )
-        }
+        // console.log('pullUpdates res')
+        // console.log(data)
+        resolve(
+          data.updates.map((u: any) => ({
+            changes: ChangeSet.fromJSON(u.changes),
+            clientId: u.clientID,
+          }))
+        )
         setLoading(false)
       })
     })
@@ -129,18 +125,22 @@ const EditorComponent = ({ uuid }: EditorProps) => {
           }
 
           let version = getSyncedVersion(this.view.state)
-          pushUpdates(version, updates)
+          await pushUpdates(version, updates)
           this.pushing = false
 
           if (sendableUpdates(this.view.state).length) {
-            setTimeout(() => this.push(), 1000)
+            setTimeout(() => this.push(), 5000)
           }
         }
 
         async pull() {
-          while (!this.done) {
+          while (!this.done && !this.pushing) {
             let version = getSyncedVersion(this.view.state)
+            console.log(`pull() called, version: ${version}`)
             let updates = await pullUpdates(version)
+            // console.log(`new update: ${updates.length} updates`)
+            console.log(`pull() return data`)
+            console.log(updates)
             if (updates.length > 0) {
               this.view.dispatch(receiveUpdates(this.view.state, updates))
             }
