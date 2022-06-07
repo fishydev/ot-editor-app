@@ -14,7 +14,7 @@ function App() {
       <SnackbarProvider>
         <BrowserRouter>
           <Routes>
-            <Route
+            {/* <Route
               path="/"
               element={
                 <GlobalLayout>
@@ -29,8 +29,8 @@ function App() {
                   <Files />
                 </GlobalLayout>
               }
-            ></Route>
-            <Route path="/files/:uuid" element={<EditorLayout />}></Route>
+            ></Route> */}
+            <Route path="/" element={<EditorLayout />}></Route>
           </Routes>
         </BrowserRouter>
       </SnackbarProvider>
