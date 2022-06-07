@@ -5,13 +5,11 @@ import Editor from 'src/components/Editor/Editor'
 import { useParams } from 'react-router-dom'
 
 const EditorLayout = () => {
-  let { uuid } = useParams()
-
   return (
     <>
       <div>
         <HeaderEditor></HeaderEditor>
-        <Editor uuid={uuid!}></Editor>
+        <Editor></Editor>
         <Footer></Footer>
       </div>
     </>
