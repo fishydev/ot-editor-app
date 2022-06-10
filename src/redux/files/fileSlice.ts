@@ -6,7 +6,8 @@ export const fileSlice = createSlice({
   name: "auth",
   initialState: {
     openedFileUuid: null,
-    openedFile: {} as IOpenedFile
+    openedFile: {} as IOpenedFile,
+    connectedUserAmount: 0
   },
   reducers: {
     setOpenedFileUuid: (state, action) => {
@@ -14,13 +15,17 @@ export const fileSlice = createSlice({
     },
     setOpenedFile: (state, action) => {
       state.openedFile = action.payload
+    },
+    setConnectedUserAmount: (state, action) => {
+      state.connectedUserAmount = action.payload
     }
   }
 })
 
 export const {
   setOpenedFileUuid,
-  setOpenedFile
+  setOpenedFile,
+  setConnectedUserAmount
 } = fileSlice.actions
 
 export default fileSlice.reducer

@@ -17,6 +17,7 @@ const pushUpdates = async (socket: Socket, version: number, fullUpdates: readonl
 
   return await new Promise((resolve) => {
     console.log(`pushUpdates req sent`)
+    console.log(`client ver: ${version}`)
     socket.emit(
       'pushUpdates',
       {
@@ -34,20 +35,12 @@ const pullUpdates = async (socket: Socket, version: number): Promise<readonly Up
   console.log(`pullUpdates req sent`)
   return await new Promise((resolve) => {
     socket.emit('pullUpdates', { version: version }, (data: any) => {
-      // console.log('pullUpdates res')
-      // console.log(data)
-      console.log(`data`)
-      console.log(data)
-      if (data.length > 0) {
         resolve(
           data.map((u: any) => ({
             changes: ChangeSet.fromJSON(u.changes),
             clientId: u.clientID,
           }))
         )
-      } else {
-        resolve([])
-      }
     })
   })
 }
@@ -64,16 +57,22 @@ export const getClientExtension = (startVersion: number, socket: Socket) => {
       }
 
       update(update: ViewUpdate) {
-        if (update.docChanged) this.push()
+        if (update.docChanged) {
+          console.log(`doc changed`)
+          this.push()
+        }
       }
 
       async push() {
         const updates = sendableUpdates(this.view.state);
+        console.log(`sendable updates: `)
+        console.log(updates)
         if (this.pushing || !updates.length) {
           return;
         }
         this.pushing = true;
         const version = getSyncedVersion(this.view.state);
+        console.log(`push getSyncedVersion: ${version}`)
         await pushUpdates(socket, version, updates);
         this.pushing = false;
         // Regardless of whether the push failed or new updates came in
@@ -86,10 +85,12 @@ export const getClientExtension = (startVersion: number, socket: Socket) => {
       async pull() {
         while (!this.done) {
           const version = getSyncedVersion(this.view.state);
+          console.log(`pull getSyncedVersion: ${version}`)
           const updates = await pullUpdates(socket, version);
-          if (updates.length > 0) {
-            this.view.dispatch(receiveUpdates(this.view.state, updates));
-          }
+          this.view.dispatch(receiveUpdates(this.view.state, updates));
+          console.log(`after pull getSyncedVersion: ${version}`)
+          // if (updates.length > 0) {
+          // }
         }
       }
 

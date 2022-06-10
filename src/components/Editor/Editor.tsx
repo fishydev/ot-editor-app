@@ -1,13 +1,13 @@
-import React, { MutableRefObject, useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import socketIOClient, { Socket } from 'socket.io-client'
-import { Fab } from '@mui/material'
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
-import SyncIcon from '@mui/icons-material/Sync'
-import { ChangeSet, Extension, Text } from '@codemirror/state'
+import { Extension, Text } from '@codemirror/state'
 import { getClientExtension } from './CodeMirrorExtension'
 import { EditorState, basicSetup } from '@codemirror/basic-setup'
-import { EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view'
-import CodeMirror from '@uiw/react-codemirror'
+import { EditorView } from '@codemirror/view'
+import { setConnectedUserAmount } from 'src/redux/files/fileSlice'
+import { useAppSelector } from 'src/redux/hooks'
+import { useAppDispatch } from 'src/redux/hooks'
+
 
 const SOCKET_ENDPOINT = 'http://localhost:8999'
 
@@ -17,6 +17,8 @@ const EditorComponent = () => {
   const [version, setVersion] = useState<number | null>(null)
   const [clientExtension, setClientExtension] = useState<Extension[] | null>(null)
   const [loading, setLoading] = useState(false)
+
+  let dispatch = useAppDispatch()
 
   const socketClientRef = useRef<Socket>()
   const editorRef = useRef<HTMLDivElement | undefined>()
